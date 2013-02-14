@@ -1,0 +1,36 @@
+{
+    "name": "ga",
+    "title": "jQuery Google Analytics",
+    "description": "Google analytics implementation for jQuery.",
+    "keywords": [
+        "ga",
+        "google",
+        "analytics",
+        "analyze",
+        "stats",
+        "statistic",
+        "statistics",
+        "yckart",
+        "yannick",
+        "albert"
+    ],
+    "version": "0.0.3",
+    "author": {
+        "name": "Yannick Albert",
+        "email": "mail@yckart.com",
+        "url": "https://github.com/yckart"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://yckart.com/mit/"
+        }
+    ],
+    "homepage": "http://yckart.github.com/jquery.ga.js",
+    "demo": "http://yckart.github.com/jquery.ga.js",
+    "docs": "https://github.com/yckart/jquery.ga.js",
+    "bugs": "https://github.com/yckart/jquery.ga.js/issues",
+    "dependencies": {
+        "jquery": ">=1.8"
+    }
+}
