@@ -4,97 +4,119 @@
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width'>
 
+    <link href='http://fonts.googleapis.com/css?family=Numans' rel='stylesheet'>
     <style>
         html,body{height:100%; margin:0; padding:0}
         body {
-            font-family: helvetica;
-            background: #cedce7;
-            /* Old browsers */
-            background: -moz-radial-gradient(center, ellipse cover, #fff 0%, #dbdbdb 100%);
-            /* FF3.6+ */
-            background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, #fff), color-stop(100%, #dbdbdb));
-            /* Chrome,Safari4+ */
-            background: -webkit-radial-gradient(center, ellipse cover, #fff 0%, #dbdbdb 100%);
-            /* Chrome10+,Safari5.1+ */
-            background: -o-radial-gradient(center, ellipse cover, #fff 0%, #dbdbdb 100%);
-            /* Opera 12+ */
-            background: -ms-radial-gradient(center, ellipse cover, #fff 0%, #dbdbdb 100%);
-            /* IE10+ */
-            background: radial-gradient(center, ellipse cover, #fff 0%, #dbdbdb 100%);
-            /* W3C */
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#dbdbdb', GradientType=1);
-            /* IE6-9 fallback on horizontal gradient */
+            font-family: 'Numans', sans-serif;
+            text-align: center;
+            background: whiteSmoke;
+            background: -moz-radial-gradient(center, ellipse cover, white 0%, #f6f6f6 47%, #ededed 100%);
+            background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, white), color-stop(47%, #f6f6f6), color-stop(100%, #ededed));
+            background: -webkit-radial-gradient(center, ellipse cover, white 0%, #f6f6f6 47%, #ededed 100%);
+            background: -o-radial-gradient(center, ellipse cover, white 0%, #f6f6f6 47%, #ededed 100%);
+            background: -ms-radial-gradient(center, ellipse cover, white 0%, #f6f6f6 47%, #ededed 100%);
+            background: radial-gradient(ellipse at center, white 0%, #f6f6f6 47%, #ededed 100%);
+            filter:progid:DXImageTransform.Microsoft.Alpha(opacity=100, finishopacity=90, style=2);
         }
-        .example {width:600px; height: 200px; position:relative; top:50%; margin:-100px auto 0; text-align: center}
+        hr{
+            border: 0;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #fff;
+            box-shadow: 3px 3px 20px 5px #eee;
+        }
+
+        .example {width:600px; margin: 60px auto 0}
         .example div {text-align:left; margin: 20px}
-        a {display:inline-block; margin:6px 6px; color:black; text-decoration: none; border-bottom: 1px dotted #0ae}
-        i {display:block}
-        input {background: transparent; border:none; border-bottom: 1px dotted #aaa}
-        input, pre { font-family:courier, 'courier new', mono-space; }
+
+        .local {}
+        .local input {background: transparent; border:none; border-bottom: 1px dotted #aaa}
+        .local input, .local pre { font-family:courier, 'courier new', mono-space; }
+
+        .session {}
+        #box {
+            float:left;
+            width: 128px;
+            height: 128px;
+            background: rgb(0, 170, 238)
+        }
+        .session input {display:block}
     </style>
 
     <title>jquery.ga.js | Google analytics implementation for jQuery.</title>
 </head>
 
 <body>
-    <div class="example">
-        <h1>jQuery Storage</h1>
+    <h1>jQuery Storage</h1>
+
+    <div class="example local">
+        <h2>localStorage</h2>
+        <hr>
         <div class="set">
-            <code>$.storage('</code><input type="text" class="key" placeholder="Enter a key..."><code>', '</code> <input type="text" class="value" placeholder="Enter a value..."> <code>');</code>
-            <button>Save item</button>
+            <code>$.localStorage('</code><input type="text" class="key" placeholder="Enter a key..."><code>', '</code> <input type="text" class="value" placeholder="Enter a value..."> <code>');</code>
+            <!-- <button>Set item</button> -->
         </div>
 
         <div class="get">
-            <code>$.storage('</code><input type="text" placeholder="Enter an item..."><code>');</code>
-            <button>Get item</button>
+            <code>$.localStorage('</code><input type="text" placeholder="Enter an item..."><code>'); <span class="result"></span></code>
+            <!-- <button>Get item</button> -->
         </div>
 
-        <div class="delete">
-            <code>$.storage.deleteItem('</code><input type="text" placeholder="Enter an item..."><code>');</code>
-            <button>Delete item</button>
+        <div class="remove">
+            <code>$.localStorage('</code><input type="text" placeholder="Enter an item..."><code>', null);</code>
+            <button>Remove item</button>
         </div>
+    </div>
 
-        <i>- No documentation yet -</i>
+    <div class="example session">
+        <h2>sessionStorage</h2>
+        <hr>
+        <div>
+            <div id="box"></div>
+            <label for="r">Red</label>
+            <input type="range" value="100" min="0" max="255" step="1" id="r" />
+
+            <label for="g">Green</label>
+            <input type="range" value="100" min="0" max="255" step="1" id="g" />
+
+            <label for="b">Blue</label>
+            <input type="range" value="100" min="0" max="255" step="1" id="b" />
+            <button>Reset</button>
+        </div>
 
         <hr>
 
-        <div id="log"></div>
+        <i>- No documentation yet -</i>
+
+
+        <!-- <a href="">yckart.com</a> -->
     </div>
 
     <script src='http://code.jquery.com/jquery-1.9.1.min.js'></script>
     <script src='jquery.storage.js'></script>
     <script>
-        var set = $('.set'),
+        /* localStorage
+        ================= */
+        var local = $('.local'),
+            set = $('.set'),
             get = $('.get'),
-            del = $('.delete');
+            del = $('.remove');
 
-        set.find('button').click(function(){
-            $.storage( set.find('.key').val(), set.find('.value').val());
-
-            log( 'setItem', set.find('.key').val(),  set.find('.value').val() );
+        set.find('input').keyup(function(){
+            $.localStorage( set.find('.key').val(), set.find('.value').val() );
+            get.find('input').val( set.find('.key').val() );
+            get.find('.result').text( '// ' + $.localStorage( set.find('.key').val() ) )
         });
+        get.find('.result').text( '// ' + $.localStorage( set.find('.key').val() ) )
 
-        get.find('button').click(function(){
-            log( 'getItem', get.find('input').val(), $.storage(get.find('input').val()));
+        get.find('input').keyup(function(){
+            get.find('.result').text( '// ' + $.localStorage( get.find('input').val() ) )
         });
 
         del.find('button').click(function(){
-            var val = $.storage.deleteItem(del.find('input').val());
+            var val = $.localStorage(del.find('input').val(), null);
 
-            if(val) log( 'deleteItem', del.find('input').val());
         });
-
-        var log = function(action, key, value){
-            var message;
-            if(action === 'setItem') {
-                message = '<code>' + key + '</code> was set to <code>' + value + '</code>.'
-            } else if(action === 'getItem') {
-                message = '<code>' + key + '</code> contains <code>' + value + '</code>.'
-            } else {
-                message = '<code>' + key + '</code> was removed.'
-            }
-            $('#log').append('<b>' + action + '</b>: ' + message + '<br>')
-        };
 
         var resizeInput = function() {
             var self = $(this),
@@ -104,6 +126,57 @@
         };
 
         $('input[type="text"]').on('keydown keyup', resizeInput).each(resizeInput);
+
+
+
+        /* sessionStorage
+        ================= */
+        var session = $('.session');
+
+        var boxRGB = $.data(this, 'rgb', $('#box').css('backgroundColor').match(/\d+/g)),
+            RGB = $.sessionStorage('rgb') || boxRGB;
+
+        $('#box').css({
+            backgroundColor: 'rgb(' + RGB[0] + ',' + RGB[1] + ',' + RGB[2] + ')'
+        });
+
+        session.find('input').each(function(i){
+            $(this).val(RGB[i]);
+        });
+
+        session.find('input').on('change keyup', function(){
+
+            $.sessionStorage('rgb', [
+                $('#r').val(),
+                $('#g').val(),
+                $('#b').val()
+            ]);
+
+            RGB = $.sessionStorage('rgb');
+
+            $('#box').css({
+                backgroundColor: 'rgb(' + RGB[0] + ',' + RGB[1] + ',' + RGB[2] + ')'
+            });
+        });
+
+
+        session.find('button').click(function(){
+            $.sessionStorage('rgb', null);
+            $('#box').css({
+                backgroundColor: 'rgb(' + boxRGB[0] + ',' + boxRGB[1] + ',' + boxRGB[2] + ')'
+            });
+            session.find('input').each(function(i){
+                $(this).val(boxRGB[i]);
+            });
+        });
+
+        // Allow only rgb values as input
+        session.find('input').keyup(function (e) {
+            var v = this.value,
+                s = v.slice(0,-1);
+            this.value = v.charAt(0) > 2 ? s : v.charAt(0) > 1 && v.charAt(1) > 5 ? s : v > 255 ? s : v.replace(/\D/g,''); // /[^0-9\.]/g
+        });
+
     </script>
 </body>
 </html>

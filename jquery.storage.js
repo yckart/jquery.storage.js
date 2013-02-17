@@ -6,124 +6,82 @@
  * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php).
  * 2013/02/10
  **/
+;(function($, window) {
+    "use strict";
 
-;(function ($, window, document) {
+    var support = [];
 
-    var ls = window.localStorage;
-
-    $.support.localStorage = supported = typeof ls == 'undefined' || typeof window.JSON == 'undefined' ? false : true;
-
-    /* Make the methods public */
-    $.storage = function (key, value, options) {
-        return $.storage.impl.init(key, value);
-    };
-
-    $.storage.setItem = function (key, value) {
-        return $.storage.impl.setItem(key, value);
-    };
-
-    $.storage.getItem = function (key) {
-        return $.storage.impl.getItem(key);
-    };
-
-    $.storage.getAll = function () {
-        return $.storage.impl.getAll();
-    };
-
-    $.storage.deleteItem = function (key) {
-        return $.storage.impl.deleteItem(key);
-    };
-
-    /* Object to hold all methods: public and private */
-    $.storage.impl = {
-
-        init: function (key, value) {
-            return typeof value != 'undefined' ? this.setItem(key, value) : this.getItem(key);
-        },
-
-        setItem: function (key, value) {
-            if (!$.support.localStorage) {
-                var expires = new Date();
-                    expires.setTime(expires.getTime() + 31536000000); // 1 year
-                    document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
-                    return value;
-            }
-            var saver = JSON.stringify(value);
-            ls.setItem(key, saver);
-            return this.parseResult(saver);
-        },
-
-        getItem: function (key) {
-            if (!$.support.localStorage) {
-                try {
-                    var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
-                    return this.parseResult(keyValue ? keyValue[2] : null);
-                } catch (e) {
-                    return null;
-                }
-            }
-            return this.parseResult(ls.getItem(key));
-        },
-        deleteItem: function (key) {
-            var returns = this.getItem(key);
-            if (!$.support.localStorage) {
-                try {
-                    document.cookie = encodeURIComponent(key) + "=deleted; expires=" + new Date(0).toUTCString();
-                    return true;
-                } catch (e) {
-                    return false;
-                }
-            }
-
-            ls.removeItem(key);
-            return returns ? true : false;
-        },
-        getAll: function () {
-            var items = [];
-            if (!$.support.localStorage) {
-                try {
-                    var pairs = document.cookie.split(";");
-                    while (pairs.length--) {
-                        var pair = pairs[pairs.length].split('=');
-                        var key = pair[0];
-                        var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
-                        items.push({
-                            key: key,
-                            value: this.parseResult(keyValue ? keyValue[2] : null)
-                        });
-                    }
-                } catch (e) {
-                    return null;
-                }
-            } else {
-                for (var i in ls) {
-                    if (i.length) {
-                        items.push({
-                            key: i,
-                            value: this.parseResult(ls.getItem(i))
-                        });
-                    }
-                }
-            }
-            return items;
-        },
-
-        parseResult: function (res) {
-            var ret;
-            try {
-                ret = JSON.parse(res);
-                if (ret == 'true') {
-                    ret = true;
-                }
-                if (ret == 'false') {
-                    ret = false;
-                }
-                if (parseFloat(ret) == ret && typeof ret != "object") {
-                    ret = parseFloat(ret);
-                }
-            } catch (e) {}
-            return ret;
+    $.map(['localStorage', 'sessionStorage'], function( type ) {
+        try {
+            support[type] = type in window && window[type] !== null;
+        } catch (e) {
+            support[type] = false;
         }
-    };
 
-}(jQuery, window, document));
+        $[type] = function(key, value) {
+            this.settings = $.extend({}, {
+                cookiePrefix : 'html5fallback:' + type + ':',
+                cookieOptions : {
+                    path : '/',
+                    domain : document.domain,
+                    expires : ('localStorage' === type) ? { expires: 365 } : undefined
+                }
+            }, key);
+
+            this.getItem = function( key ) {
+                return JSON.parse(support[type] ? window[type].getItem(key) : $.cookie(this.settings.cookiePrefix + key));
+            };
+
+            this.setItem = function( key, value ) {
+                value = JSON.stringify(value);
+                return support[type] ? window[type].setItem(key, value) : $.cookie(this.settings.cookiePrefix + key, value, this.settings.cookieOptions);
+            };
+
+            this.removeItem = function( key ) {
+                return support[type] ? window[type].removeItem(key) : $.cookie(this.settings.cookiePrefix + key, null, $.extend(this.settings.cookieOptions, {
+                    expires: -1
+                }));
+            };
+
+            this.clear = function() {
+                if(support[type]) {
+                    return window[type].clear();
+                } else {
+                    var reg = new RegExp('^' + this.settings.cookiePrefix, ''),
+                        options = $.extend(this.settings.cookieOptions, {
+                            expires: -1
+                        });
+
+                    if(document.cookie && document.cookie !== ''){
+                        $.map(document.cookie.split(';'), function( cookie ){
+                            if(reg.test(cookie = $.trim(cookie))) {
+                                 $.cookie( cookie.substr(0,cookie.indexOf('=')), null, options);
+                            }
+                        });
+                    }
+                }
+            };
+            if (typeof key !== "undefined") {
+                if (typeof value !== "undefined") {
+                    if (value === null) {
+                        return this.removeItem(key);
+                    } else {
+                        return this.setItem(key, value);
+                    }
+                } else {
+                    return this.getItem(key);
+                }
+            }
+            return this;
+        };
+
+        $[type].defaults = {
+            cookiePrefix : 'html5fallback:' + type + ':',
+            cookieOptions : {
+                path : '/',
+                domain : document.domain,
+                expires : ('localStorage' === type) ? { expires: 365 } : undefined
+            }
+        };
+    });
+})(jQuery, window);
