@@ -132,6 +132,8 @@ Sometimes you need to remove **all** key-value pairs, dont worry this is just as
 * `$.support.localStorage` | Tests for `localStorage`-support
 * `$.support.sessionStorage` | Tests for `sessionStorage`-support
 
+Both return `true` or `false`, depending on the availability.
+
 ## Download
  Get the [raw](https://raw.github.com/yckart/jquery.fixer.js/master/jquery.storage.js) script, download the complete [package](https://github.com/yckart/jquery.storage.js/zipball/master) or fork it on [GitHub](https://github.com/yckart/jquery.storage.js/).
 
