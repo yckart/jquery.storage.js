@@ -19,7 +19,7 @@ https://github.com/carhartl/jquery-cookie
 -->
 ```
 
-Now you can use [storage](https://github.com/yckart/jquery.storage.js):
+<!-- Now you can use [storage](https://github.com/yckart/jquery.storage.js): -->
 
 ### Create or update an item
 #### localStorage
@@ -62,9 +62,9 @@ for multiple returns use an array instead:
 | `domain` | The cookie domain to use. | `document.domain` |
 | `expires` | The time when your cookie has to expire. | `('localStorage' === method) ? { expires: 365 } : undefined` |
 
-You've two ways to set/override the default options:
+<!-- You've two ways to set/override the default options:
 
-### 1st
+### 1st -->
 
     $.localStorage.options = {
         cookiePrefix : 'fallback:' + method + ':',
@@ -74,7 +74,7 @@ You've two ways to set/override the default options:
             expires : ('localStorage' === method) ? { expires: 365 } : undefined
         }
     };
-
+<!-- 
 ### 2nd
 
     var ls = $.localStorage({
@@ -85,13 +85,17 @@ You've two ways to set/override the default options:
             expires : ('localStorage' === method) ? { expires: 365 } : undefined
         }
     });
+-->
 
 ## Public Methods
 There're some public methods which you can use instead of the default syntax.
+<!-- 
 If you prefer this style I recommend that you use the [2nd way](https://github.com/yckart/jquery.storage.js/blob/master/README.md#2nd) of setting the plugin-defaults.
-And by the way the following methods can (of course) also used with `$.sessionStorage()`:
+-->
+...by the way the following methods can (of course) also used with `$.sessionStorage()`:
 
-
+    var ls = $.localStorage();
+    var ss = $.sessionStorage();
 
 ### `setItem()`
 To set a storage-item you can attach `setItem` to your `storage`-instance:
