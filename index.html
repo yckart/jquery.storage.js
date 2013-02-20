@@ -41,6 +41,8 @@
             background: rgb(0, 170, 238)
         }
         .session input {display:block}
+
+        .docu {text-align:left;}
     </style>
 
     <title>jquery.ga.js | Google analytics implementation for jQuery.</title>
@@ -83,13 +85,234 @@
             <input type="range" value="100" min="0" max="255" step="1" id="b" />
             <button>Reset</button>
         </div>
+    <div>
 
-        <hr>
+    <hr>
 
-        <i>- No documentation yet -</i>
+    <div class="docu">
+        <!-- <i>- No documentation yet -</i> -->
+
+        <h2>Usage</h2>
+
+        <p>It's quite simple!</p>
+        <p>Standard prozedure, include <code>jquery</code> and <code>jquery.storage.js</code>:</p>
+        <pre><code class="lang-html">&lt;script src="jquery.js"&gt;&lt;/script&gt;
+&lt;script src="jquery.storage.js"&gt;&lt;/script&gt;
+
+&lt;!--
+You can optional include a $.cookie plugin
+to support older browsers (e.q. IE lt 7)
+I recommend the plugin from Klaus Hartl:
+https://github.com/carhartl/jquery-cookie
+
+(but you can of course use any other plugin with an equal syntax)
+&lt;script src="jquery.cookie.js"&gt;&lt;/script&gt;
+--&gt;</code></pre>
+
+        <!-- Now you can use [storage](https://github.com/yckart/jquery.storage.js):
+        -->
+
+        <h3>Create or update an item</h3>
 
 
-        <!-- <a href="">yckart.com</a> -->
+        <h4>localStorage</h4>
+
+        <pre><code>$.localStorage('foo', 'bar');</code></pre>
+
+
+        <h4>sessionStorage</h4>
+
+        <pre><code>$.sessionStorage('foo', 'bar');</code></pre>
+
+
+        <h3>Get an item or items</h3>
+
+
+        <h4>localStorage</h4>
+
+        <p>To get a single value just pass your key as a <code>string</code>:</p>
+        <pre><code>$.localStorage('foo'); // 'bar'</code></pre>
+
+        <p>for multiple returns use an array instead:</p>
+        <pre><code>$.localStorage(['key1', 'key2']); // ['value1', 'value2']</code></pre>
+
+
+        <h4>sessionStorage</h4>
+
+        <p>To get a single value just pass your key as a <code>string</code>:</p>
+        <pre><code>$.sessionStorage('foo'); // 'bar'</code></pre>
+
+        <p>for multiple returns use an array instead:</p>
+        <pre><code>$.sessionStorage(['key1', 'key2']); // ['value1', 'value2']</code></pre>
+
+
+        <h3>Remove an item</h3>
+
+
+        <h4>localStorage</h4>
+
+        <pre><code>$.localStorage('foo', null);</code></pre>
+
+
+        <h4>sessionStorage</h4>
+
+        <pre><code>$.sessionStorage('foo', null);</code></pre>
+
+
+        <h2>Options</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th align="left">option</th>
+                    <th align="left">description</th>
+                    <th align="left">default</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td align="left"><code>cookiePrefix</code>
+                    </td>
+                    <td align="left">Defines a prefix to prepend to your cookie-fallback</td>
+                    <td align="left"><code>'fallback:' + method + ':'</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left"><code>path</code>
+                    </td>
+                    <td align="left">The cookie path to use.</td>
+                    <td align="left"><code>'/'</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left"><code>domain</code>
+                    </td>
+                    <td align="left">The cookie domain to use.</td>
+                    <td align="left"><code>document.domain</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left"><code>expires</code>
+                    </td>
+                    <td align="left">The time when your cookie has to expire.</td>
+                    <td align="left"><code>('localStorage' === method) ? { expires: 365 } : undefined</code>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- You've two ways to set/override the default options: ### 1st -->
+        <pre><code>$.localStorage.options = {
+    cookiePrefix : 'fallback:' + method + ':',
+    cookieOptions : {
+        path : '/',
+        domain : document.domain,
+        expires : ('localStorage' === method) ? { expires: 365 } : undefined
+    }
+};</code></pre>
+
+        <!-- ### 2nd var ls=$ .localStorage({ cookiePrefix : 'fallback:'
+        + method + ':', cookieOptions : { path : '/', domain : document.domain,
+        expires : ('localStorage'===m ethod) ? { expires: 365 } : undefined } });
+        -->
+
+        <h2>Public Methods</h2>
+
+        <p>There're some public methods which you can use instead of the default
+            syntax.
+            <!-- If you prefer this style I recommend that you use the [2nd
+            way](https://github.com/yckart/jquery.storage.js/blob/master/README.md#2nd)
+            of setting the plugin-defaults. -->...by the way the following methods can (of course) also used with <code>$.sessionStorage()</code>:</p>
+        <pre><code>var ls = $.localStorage();
+var ss = $.sessionStorage();</code></pre>
+
+
+        <h3><code>setItem()</code></h3>
+
+        <p>To set a storage-item you can attach <code>setItem</code> to your <code>storage</code>-instance:</p>
+        <pre><code>ls.setItem('foo', 'bar');</code></pre>
+
+
+        <h3><code>getItem()</code></h3>
+
+        <p>gets an earlier <em>setted</em>, it is just as easy as <a href="https://github.com/yckart/jquery.storage.js/blob/master/README.md#setitem"><code>setItem</code></a>.
+            Attach <code>getItem</code> to your instance and pass the key/s (as a <code>string</code>)
+            to it:</p>
+        <pre><code>ls.getItem('foo'); // 'bar'</code></pre>
+
+        <p>If you need to get more than one <code>value</code> pass your <code>keys</code> as
+            an <code>array</code> to <code>getItem</code>:</p>
+        <pre><code>ls.getItem(['key1', 'key2']); // ['value1', 'value2']</code></pre>
+
+
+        <h3><code>removeItem()</code></h3>
+
+        <p>removes an earlier defined item:</p>
+        <pre><code>ls.removeItem('foo') // null</code></pre>
+
+
+        <h3><code>clear()</code></h3>
+
+        <p>Sometimes you need to remove <strong>all</strong> key-value pairs, dont
+            worry this is just as easy as anything else:</p>
+        <pre><code>ls.clear();</code></pre>
+
+
+        <h2>Extras</h2>
+
+        <p><a href="https://github.com/yckart/jquery.storage.js">Storage</a> gives
+            you two new <code>jQuery.support</code>-properties:</p>
+        <ul>
+            <li><code>$.support.localStorage</code> | Tests for <code>localStorage</code>-support</li>
+            <li><code>$.support.sessionStorage</code> | Tests for <code>sessionStorage</code>-support</li>
+        </ul>
+        <p>Both return <code>true</code> or <code>false</code>, depending on the availability.</p>
+
+        <h2>Download</h2>
+
+        <p>Get the <a href="https://raw.github.com/yckart/jquery.fixer.js/master/jquery.storage.js">raw</a> script,
+            download the complete <a href="https://github.com/yckart/jquery.storage.js/zipball/master">package</a> or
+            fork it on <a href="https://github.com/yckart/jquery.storage.js/">GitHub</a>.</p>
+
+        <h2>Support</h2>
+
+        <p> <a href="http://twitter.com/yckart">@yckart</a> #jquery #storage</p>
+        <p> <a href="http://yckart.com/"></a><a href="http://yckart.com">http://yckart.com</a>
+        </p>
+
+        <h2>Todo</h2>
+
+        <p>Make it possible to pass the options as object to the <code>$.storage</code>-method,
+            like this:</p>
+        <pre><code>var ls = $.localStorage({
+    cookiePrefix : 'fallback:' + method + ':',
+    cookieOptions : {
+        path : '/',
+        domain : document.domain,
+        expires : ('localStorage' === method) ? { expires: 365 } : undefined
+    }
+});</code></pre>
+
+
+        <h3>License</h3>
+
+        <p>Copyright (c) 2013 Yannick Albert (<a href="http://yckart.com/"></a>
+            <a
+            href="http://yckart.com/">http://yckart.com/</a>)</p>
+        <p>Permission is hereby granted, free of charge, to any person obtaining
+            a copy of this software and associated documentation files (the "Software"),
+            to deal in the Software without restriction, including without limitation
+            the rights to use, copy, modify, merge, publish, distribute, sublicense,
+            and/or sell copies of the Software, and to permit persons to whom the Software
+            is furnished to do so, subject to the following conditions:</p>
+        <p>The above copyright notice and this permission notice shall be included
+            in all copies or substantial portions of the Software.</p>
+        <p>THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS
+            OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+            FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+            THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+            LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+            FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+            IN THE SOFTWARE.</p>
     </div>
 
     <script src='http://code.jquery.com/jquery-1.9.1.min.js'></script>
