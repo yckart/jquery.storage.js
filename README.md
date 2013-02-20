@@ -1,6 +1,6 @@
 # jQuery.storage.js
 
-## Useage
+## Usage
 It's quite simple!
 
 Standard Prozedure: include `jquery` and `jquery.storage.js`:
@@ -140,6 +140,7 @@ Both return `true` or `false`, depending on the availability.
 ## Support
 
  [@yckart](http://twitter.com/yckart) #jquery #storage
+ 
  [http://yckart.com](http://yckart.com/)
 
 
