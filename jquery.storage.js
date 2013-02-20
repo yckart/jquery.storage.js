@@ -19,14 +19,7 @@
         }
 
         $[type] = function(key, value) {
-            this.settings = $.extend({}, {
-                cookiePrefix : 'html5fallback:' + type + ':',
-                cookieOptions : {
-                    path : '/',
-                    domain : document.domain,
-                    expires : ('localStorage' === type) ? { expires: 365 } : undefined
-                }
-            }, key);
+            this.settings = $.extend({}, $[type].defaults, key);
 
             this.getItem = function( key ) {
                 return JSON.parse(support[type] ? window[type].getItem(key) : $.cookie(this.settings.cookiePrefix + key));
