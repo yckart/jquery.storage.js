@@ -1,87 +1,82 @@
 /*!
- * jquery.storage.js 0.1 - https://github.com/yckart/jquery.storage.js
+ * jquery.storage.js 0.0.3 - https://github.com/yckart/jquery.storage.js
  * The client-side storage for every browser, on any device.
  *
  * Copyright (c) 2012 Yannick Albert (http://yckart.com)
  * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php).
  * 2013/02/10
  **/
-;(function($, window) {
-    "use strict";
+;(function($, window, document) {
+    'use strict';
 
-    var support = [];
+    $.map(['localStorage', 'sessionStorage'], function( method ) {
+        var defaults = {
+            cookiePrefix : 'fallback:' + method + ':',
+            cookieOptions : {
+                path : '/',
+                domain : document.domain,
+                expires : ('localStorage' === method) ? { expires: 365 } : undefined
+            }
+        };
 
-    $.map(['localStorage', 'sessionStorage'], function( type ) {
         try {
-            support[type] = type in window && window[type] !== null;
+            $.support[method] = method in window && window[method] !== null;
         } catch (e) {
-            support[type] = false;
+            $.support[method] = false;
         }
 
-        $[type] = function(key, value) {
-            this.settings = $.extend({}, {
-                cookiePrefix : 'html5fallback:' + type + ':',
-                cookieOptions : {
-                    path : '/',
-                    domain : document.domain,
-                    expires : ('localStorage' === type) ? { expires: 365 } : undefined
-                }
-            }, key);
+        $[method] = function(key, value) {
+            var options = $.extend({}, defaults, $[method].options);
 
             this.getItem = function( key ) {
-                return JSON.parse(support[type] ? window[type].getItem(key) : $.cookie(this.settings.cookiePrefix + key));
+                var returns = function(key){
+                    return JSON.parse($.support[method] ? window[method].getItem(key) : $.cookie(options.cookiePrefix + key));
+                };
+                if(typeof key === 'string') return returns(key);
+
+                var arr = [],
+                    i = key.length;
+                while(i--) arr[i] = returns(key[i]);
+                return arr;
             };
 
             this.setItem = function( key, value ) {
                 value = JSON.stringify(value);
-                return support[type] ? window[type].setItem(key, value) : $.cookie(this.settings.cookiePrefix + key, value, this.settings.cookieOptions);
+                return $.support[method] ? window[method].setItem(key, value) : $.cookie(options.cookiePrefix + key, value, options.cookieOptions);
             };
 
             this.removeItem = function( key ) {
-                return support[type] ? window[type].removeItem(key) : $.cookie(this.settings.cookiePrefix + key, null, $.extend(this.settings.cookieOptions, {
+                return $.support[method] ? window[method].removeItem(key) : $.cookie(options.cookiePrefix + key, null, $.extend(options.cookieOptions, {
                     expires: -1
                 }));
             };
 
             this.clear = function() {
-                if(support[type]) {
-                    return window[type].clear();
+                if($.support[method]) {
+                    return window[method].clear();
                 } else {
-                    var reg = new RegExp('^' + this.settings.cookiePrefix, ''),
-                        options = $.extend(this.settings.cookieOptions, {
+                    var reg = new RegExp('^' + options.cookiePrefix, ''),
+                        opts = $.extend(options.cookieOptions, {
                             expires: -1
                         });
 
                     if(document.cookie && document.cookie !== ''){
                         $.map(document.cookie.split(';'), function( cookie ){
                             if(reg.test(cookie = $.trim(cookie))) {
-                                 $.cookie( cookie.substr(0,cookie.indexOf('=')), null, options);
+                                 $.cookie( cookie.substr(0,cookie.indexOf('=')), null, opts);
                             }
                         });
                     }
                 }
             };
+
             if (typeof key !== "undefined") {
-                if (typeof value !== "undefined") {
-                    if (value === null) {
-                        return this.removeItem(key);
-                    } else {
-                        return this.setItem(key, value);
-                    }
-                } else {
-                    return this.getItem(key);
-                }
+                return typeof value !== "undefined" ? ( value === null ? this.removeItem(key) : this.setItem(key, value) ) : this.getItem(key);
             }
+
             return this;
         };
 
-        $[type].defaults = {
-            cookiePrefix : 'html5fallback:' + type + ':',
-            cookieOptions : {
-                path : '/',
-                domain : document.domain,
-                expires : ('localStorage' === type) ? { expires: 365 } : undefined
-            }
-        };
+        $[method].options = defaults;
     });
-})(jQuery, window);
+})(jQuery, window, document);
