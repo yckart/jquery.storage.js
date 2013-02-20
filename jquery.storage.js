@@ -25,13 +25,8 @@
             $.support[method] = false;
         }
 
-<<<<<<< HEAD
         $[method] = function(key, value) {
             var options = $.extend({}, defaults, $[method].options);
-=======
-        $[type] = function(key, value) {
-            this.settings = $.extend({}, $[type].defaults, key);
->>>>>>> bf8f40dbd79b3836777bb0de0015c6e7a3a995ef
 
             this.getItem = function( key ) {
                 var returns = function(key){
@@ -84,8 +79,4 @@
 
         $[method].options = defaults;
     });
-<<<<<<< HEAD
 }(jQuery, window, document));
-=======
-})(jQuery, window);
->>>>>>> bf8f40dbd79b3836777bb0de0015c6e7a3a995ef
