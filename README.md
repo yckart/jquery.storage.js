@@ -1,6 +1,58 @@
 # jQuery.storage.js
 
 ## Useage
+It's quite simple!
+
+Standard Prozedure: include `jquery` and `jquery.storage.js`:
+```html
+<script src="jquery.js"></script>
+<script src="jquery.storage.js"></script>
+
+<!--
+You can optional include a $.cookie plugin
+to support older browsers (e.q. IE lt 7)
+I recommend the plugin from Klaus Hartl:
+https://github.com/carhartl/jquery-cookie
+
+(but you can of course use any other plugin with an equal syntax)
+<script src="jquery.cookie.js"></script>
+-->
+```
+
+Now you can use [storage](https://github.com/yckart/jquery.storage.js):
+
+### Create or update an item
+#### localStorage
+    $.localStorage('foo', 'bar');
+
+#### sessionStorage
+    $.sessionStorage('foo', 'bar');
+
+### Get an item or items
+#### localStorage
+To get a single value just pass your key as a `string`:
+
+    $.localStorage('foo'); // 'bar'
+
+for multiple returns use an array instead:
+
+    $.localStorage(['key1', 'key2']); // ['value1', 'value2']
+
+#### sessionStorage
+To get a single value just pass your key as a `string`:
+
+    $.sessionStorage('foo'); // 'bar'
+
+for multiple returns use an array instead:
+
+    $.sessionStorage(['key1', 'key2']); // ['value1', 'value2']
+
+### Remove an item
+#### localStorage
+    $.localStorage('foo', null);
+
+#### sessionStorage
+    $.sessionStorage('foo', null);
 
 ## Options
 | option | description | default |
@@ -10,7 +62,7 @@
 | `domain` | The cookie domain to use. | `document.domain` |
 | `expires` | The time when your cookie has to expire. | `('localStorage' === method) ? { expires: 365 } : undefined` |
 
-You've two ways to override the default options:
+You've two ways to set/override the default options:
 
 ### 1st
 
@@ -36,7 +88,7 @@ You've two ways to override the default options:
 
 ## Public Methods
 There're some public methods which you can use instead of the default syntax.
-If you prefer this style I recommend that you use the [2nd way](https://github.com/yckart/jquery.storage.js/edit/master/README.md#2nd) of setting the plugin-defaults.
+If you prefer this style I recommend that you use the [2nd way](https://github.com/yckart/jquery.storage.js/blob/master/README.md#2nd) of setting the plugin-defaults.
 And by the way the following methods can (of course) also used with `$.sessionStorage()`:
 
 
@@ -49,7 +101,7 @@ To set a storage-item you can attach `setItem` to your `storage`-instance:
 
 
 ### `getItem()`
-gets an earlier *setted*, it is just as easy as [`setItem`](https://github.com/yckart/jquery.storage.js/edit/master/README.md#setitem).
+gets an earlier *setted*, it is just as easy as [`setItem`](https://github.com/yckart/jquery.storage.js/blob/master/README.md#setitem).
 Attach `getItem` to your instance and pass the key/s (as a `string`) to it:
 
     ls.getItem('foo'); // 'bar'
@@ -75,7 +127,7 @@ Sometimes you need to remove **all** key-value pairs, dont worry this is just as
 
 
 ## Extras
-[Storage]('') gives you two new `jQuery.support`-properties:
+[Storage](https://github.com/yckart/jquery.storage.js) gives you two new `jQuery.support`-properties:
 
 * `$.support.localStorage` | Tests for `localStorage`-support
 * `$.support.sessionStorage` | Tests for `sessionStorage`-support
