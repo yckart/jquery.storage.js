@@ -3,7 +3,7 @@
 ## Usage
 It's quite simple!
 
-Standard Prozedure: include `jquery` and `jquery.storage.js`:
+Standard prozedure, include `jquery` and `jquery.storage.js`:
 ```html
 <script src="jquery.js"></script>
 <script src="jquery.storage.js"></script>
@@ -147,6 +147,19 @@ Both return `true` or `false`, depending on the availability.
  
  [http://yckart.com](http://yckart.com/)
 
+
+## Todo
+
+Make it possible to pass the options as object to the `$.storage`-method, like this:
+
+    var ls = $.localStorage({
+        cookiePrefix : 'fallback:' + method + ':',
+        cookieOptions : {
+            path : '/',
+            domain : document.domain,
+            expires : ('localStorage' === method) ? { expires: 365 } : undefined
+        }
+    });
 
 ###License
 Copyright (c) 2013 Yannick Albert ([http://yckart.com/](http://yckart.com/))
