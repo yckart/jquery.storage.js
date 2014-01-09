@@ -29,8 +29,9 @@
             var options = $.extend({}, defaults, $[method].options);
 
             this.getItem = function( key ) {
-                var returns = function(key){
-                    return JSON.parse($.support[method] ? window[method].getItem(key) : $.cookie(options.cookiePrefix + key));
+                var returns = function (key) {
+                    var val = $.support[method] ? window[method].getItem(key) : $.cookie(options.cookiePrefix + key);
+                    return val && JSON.parse(val);
                 };
                 if(typeof key === 'string') return returns(key);
 
