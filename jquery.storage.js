@@ -20,7 +20,7 @@
         };
 
         try {
-            $.support[method] = method in window && window[method] !== null;
+            $.support[method] = method in window && window[method] !== null && window[method].setItem("writeSupport", "1") && window[method].removeItem("writeSupport");
         } catch (e) {
             $.support[method] = false;
         }
