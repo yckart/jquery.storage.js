@@ -40,7 +40,7 @@
             this.getItem = function( key ) {
                 var returns = function (key) {
                     var val = $.support[method] ? window[method].getItem(key) : $.cookie(options.cookiePrefix + key);
-                    return val && JSON.parse(val);
+                    return val && ($.support[method] ? JSON.parse(val) : val);
                 };
                 if(typeof key === 'string') return returns(key);
 
