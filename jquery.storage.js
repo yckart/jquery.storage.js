@@ -19,11 +19,20 @@
             }
         };
 
-        try {
-            $.support[method] = method in window && window[method] !== null && window[method].setItem("writeSupport", "1") && window[method].removeItem("writeSupport");
-        } catch (e) {
-            $.support[method] = false;
-        }
+        var storageSupport = function(type) {
+            try {
+                if (type in window && window[type] !== null) {
+                    window[type].setItem("jquery.storage.writeSupport", "1");
+                    window[type].removeItem("jquery.storage.writeSupport");
+                    return true;
+                }
+            }
+            catch(e) { }
+
+            return false;
+        };
+
+        $.support[method] = storageSupport(method);
 
         $[method] = function(key, value) {
             var options = $.extend({}, defaults, $[method].options);
