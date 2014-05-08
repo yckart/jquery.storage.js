@@ -19,18 +19,28 @@
             }
         };
 
-        try {
-            $.support[method] = method in window && window[method] !== null;
-        } catch (e) {
-            $.support[method] = false;
-        }
+        var storageSupport = function(method) {
+            try {
+                if (method in window && window[method] !== null) {
+                    window[method].setItem("jqueryStorageWriteSupport", "1");
+                    window[method].removeItem("jqueryStorageWriteSupport");
+                    return true;
+                }
+            }
+            catch(e) { }
+
+            return false;
+        };
+
+        $.support[method] = storageSupport(method);
 
         $[method] = function(key, value) {
             var options = $.extend({}, defaults, $[method].options);
 
             this.getItem = function( key ) {
-                var returns = function(key){
-                    return JSON.parse($.support[method] ? window[method].getItem(key) : $.cookie(options.cookiePrefix + key));
+                var returns = function (key) {
+                    var val = $.support[method] ? window[method].getItem(key) : $.cookie(options.cookiePrefix + key);
+                    return val && ($.support[method] ? JSON.parse(val) : val);
                 };
                 if(typeof key === 'string') return returns(key);
 
