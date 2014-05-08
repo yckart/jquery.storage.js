@@ -19,11 +19,11 @@
             }
         };
 
-        var storageSupport = function(type) {
+        var storageSupport = function(method) {
             try {
-                if (type in window && window[type] !== null) {
-                    window[type].setItem("jquery.storage.writeSupport", "1");
-                    window[type].removeItem("jquery.storage.writeSupport");
+                if (method in window && window[method] !== null) {
+                    window[method].setItem("jqueryStorageWriteSupport", "1");
+                    window[method].removeItem("jqueryStorageWriteSupport");
                     return true;
                 }
             }
