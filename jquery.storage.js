@@ -30,8 +30,7 @@
 
             this.getItem = function( key ) {
                 var returns = function(key){
-                    return JSON.parse($.support[method] ? window[method].getItem(key) : $.cookie(options.cookiePrefix + key));
-                };
+                    return JSON.parse($.support[method] ? (window[method].getItem(key) == '' ? '{}' : window[method].getItem(key)) : $.cookie(options.cookiePrefix + key));
                 if(typeof key === 'string') return returns(key);
 
                 var arr = [],
